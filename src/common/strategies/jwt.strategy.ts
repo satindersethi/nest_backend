@@ -6,7 +6,7 @@ import { Model, Types } from 'mongoose';
 import type { Request } from 'express';
 import * as bcrypt from 'bcrypt';
 
-import { Session, SessionDocument } from 'src/sessions/session.schema';
+import { Session, SessionDocument } from '../../sessions/session.schema';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

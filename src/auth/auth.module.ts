@@ -8,8 +8,8 @@ import { AuthController } from './auth.controller';
 import { User, UserSchema } from './schema/user.schema';
 import { OtpModule } from '../otp/otp.module';
 import { MailModule } from '../mail/mail.module';
-import { SessionModule } from 'src/sessions/session.module';
-import { JwtStrategy } from 'src/common/strategies/jwt.strategy';
+import { SessionModule } from '../sessions/session.module';
+import { JwtStrategy } from '../common/strategies/jwt.strategy';
 
 @Module({
   imports: [

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/auth/schema/user.schema';
+import { User, UserDocument } from '../auth/schema/user.schema';
 import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()

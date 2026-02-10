@@ -2,12 +2,12 @@ import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { MailService } from '../mail/mail.service';
 import { ContactUsDto } from './dto/contact-us.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'src/common/decorators/public.decoraotrs';
+import { Public } from '../common/decorators/public.decoraotrs';
 
 @ApiTags('Contact Us')
 @Controller('contact-us')
 export class ContactController {
-  constructor(private readonly mailService: MailService) {}
+  constructor(private readonly mailService: MailService) { }
 
   @Post()
   @Public()

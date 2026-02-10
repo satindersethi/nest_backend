@@ -18,9 +18,9 @@ import {
 
 import { UserService } from './users.service';
 import { PaginatedUsersResponseDto } from './dto/user.reponse.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../auth/decorator/roles.decorator';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Request } from 'express';
 

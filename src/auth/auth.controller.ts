@@ -19,20 +19,20 @@ import type { Request } from 'express';
 
 import { AuthService } from './auth.service';
 import { VerifyOtpDto } from '../otp/dto/verify-otp.dto';
-import { ResendOtpDto } from 'src/otp/dto/resend-otp';
+import { ResendOtpDto } from '../otp/dto/resend-otp';
 import { ForceLoginDto, LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { Public } from 'src/common/decorators/public.decoraotrs';
+import { Public } from '../common/decorators/public.decoraotrs';
 import { RefreshTokenDto } from './dto/refresh.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from './decorator/roles.decorator';
 
 @ApiTags('Auth')
 @Public()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('register')
   @ApiOperation({ summary: 'Register user and send OTP' })
