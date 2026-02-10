@@ -7,18 +7,18 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: false
+    logger: false,
   });
   const config = new ConfigService();
 
-  app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)))
+  app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
 
   app.enableCors({
     origin: true,
     methods: 'GET,POST,PUT,PATCH,HEAD,DELETE,OPTIONS',
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
-  })
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   const swaggerDoc = new DocumentBuilder()
     .setTitle('Test API')
@@ -30,7 +30,7 @@ async function bootstrap() {
         scheme: 'bearer',
         bearerFormat: 'JWT',
       },
-      'jwt'
+      'jwt',
     )
     .build();
 

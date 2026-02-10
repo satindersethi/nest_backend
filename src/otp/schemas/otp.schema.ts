@@ -6,7 +6,7 @@ export type OTPDocument = OTP & Document;
 
 @Schema({ timestamps: true })
 export class OTP {
-  @Prop({ required: true, index: true })           
+  @Prop({ required: true, index: true })
   email: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })

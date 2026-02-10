@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserDto } from './user-response.dto';
 
 export class PaginatedUsersResponseDto {
-  @ApiProperty({ example:"deactive" })
+  @ApiProperty({ example: 'deactive' })
   status: string;
 
   @ApiProperty({ type: [UserDto] })

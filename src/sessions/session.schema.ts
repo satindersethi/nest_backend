@@ -11,7 +11,7 @@ export class Session {
   @Prop({ required: true })
   token: string;
 
-    @Prop() 
+  @Prop()
   refreshToken?: string;
 
   @Prop({ default: true })

@@ -21,7 +21,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  
   async validate(req: Request, payload: any) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
 
@@ -38,11 +37,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       const isMatch = await bcrypt.compare(token, session.token);
       if (isMatch) {
         return {
-    userId: payload.sub,
-    email: payload.email,
-    role: payload.role,
-    name: payload.name,
-  };
+          userId: payload.sub,
+          email: payload.email,
+          role: payload.role,
+          name: payload.name,
+        };
       }
     }
     throw new UnauthorizedException('Session expired');

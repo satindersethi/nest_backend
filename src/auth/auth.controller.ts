@@ -8,7 +8,13 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+} from '@nestjs/swagger';
 import type { Request } from 'express';
 
 import { AuthService } from './auth.service';
@@ -17,7 +23,6 @@ import { ResendOtpDto } from 'src/otp/dto/resend-otp';
 import { ForceLoginDto, LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { Public } from 'src/common/decorators/public.decoraotrs';
-import { GoogleLoginDto } from './dto/google-login.dto';
 import { RefreshTokenDto } from './dto/refresh.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -27,7 +32,7 @@ import { Roles } from './decorator/roles.decorator';
 @Public()
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   @ApiOperation({ summary: 'Register user and send OTP' })
@@ -45,7 +50,10 @@ export class AuthController {
   @Post('force-login')
   @ApiOperation({ summary: 'Force login user (clears previous sessions)' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Force login successful' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Invalid credentials' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid credentials',
+  })
   async forceLogin(@Body() body: ForceLoginDto) {
     return this.authService.forceLogin(body);
   }
@@ -83,7 +91,10 @@ export class AuthController {
   @Post('google-login')
   @Public()
   @ApiOperation({ summary: 'Login with Google (Firebase)' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Google login successful' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Google login successful',
+  })
   @HttpCode(HttpStatus.OK)
   async googleLogin(@Body('idToken') idToken: string) {
     return this.authService.googleLogin(idToken);
@@ -94,6 +105,5 @@ export class AuthController {
   @Get('profile')
   getProfile() {
     return 'Accessible by user and admin';
-}
-
+  }
 }

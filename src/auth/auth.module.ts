@@ -15,15 +15,13 @@ import { JwtStrategy } from 'src/common/strategies/jwt.strategy';
   imports: [
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-    ]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.get<string>('JWT_ACCESS_SECRET'),
-        signOptions: { expiresIn: '1d'},
+        signOptions: { expiresIn: '1d' },
       }),
     }),
     OtpModule,
@@ -31,7 +29,7 @@ import { JwtStrategy } from 'src/common/strategies/jwt.strategy';
     MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy],
+  providers: [AuthService, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

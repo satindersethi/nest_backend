@@ -10,11 +10,9 @@ export class OtpService {
   constructor(
     @InjectModel(OTP.name) private otpModel: Model<OTPDocument>,
     private mailService: MailService,
-  ) { }
+  ) {}
 
-  async generateAndSendOtp(
-    email: string,
-  ) {
+  async generateAndSendOtp(email: string) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
@@ -33,7 +31,10 @@ export class OtpService {
   }
 
   async verifyOtp(data: VerifyOtpDto) {
-    const otpRecord = await this.otpModel.findOne({ email: data.email, otp: data.otp });
+    const otpRecord = await this.otpModel.findOne({
+      email: data.email,
+      otp: data.otp,
+    });
 
     if (!otpRecord) {
       return { success: false, message: 'Invalid OTP' };

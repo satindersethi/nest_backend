@@ -7,13 +7,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+
 import { User, UserDocument } from './schema/user.schema';
 import { OtpService } from '../otp/otp.service';
 import { VerifyOtpDto } from '../otp/dto/verify-otp.dto';
 import { ForceLoginDto, LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { Session, SessionDocument } from 'src/sessions/session.schema';
-import admin from '../firebase/firebase-admin';
+import admin from 'src/firebase/firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { ConfigService } from '@nestjs/config';
 
@@ -28,35 +29,34 @@ export class AuthService {
     private readonly otpService: OtpService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   private async generateTokensAndCreateSession(
     user: UserDocument,
     session?: SessionDocument,
   ) {
-  const payload = {
-  sub: user._id,
-  email: user.email,
-  name: user.name,
-  role: user.role,
-};
+    const payload = {
+      sub: user._id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
 
     const access_token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_ACCESS_SECRET'),
-      expiresIn: this.configService.get('JWT_ACCESS_EXPIRES')
+      expiresIn: this.configService.get('JWT_ACCESS_EXPIRES'),
     });
     const refresh_token = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),
-      expiresIn: this.configService.get('JWT_REFRESH_EXPIRES')
-    })
+      expiresIn: this.configService.get('JWT_REFRESH_EXPIRES'),
+    });
 
     const hashedRefreshToken = await bcrypt.hash(refresh_token, 10);
 
     if (session) {
       session.token = hashedRefreshToken;
       await session.save();
-    }
-    else {
+    } else {
       await this.sessionModel.create({
         userId: user._id,
         token: hashedRefreshToken,
@@ -65,8 +65,8 @@ export class AuthService {
     }
     return {
       access_token,
-      refresh_token
-    }
+      refresh_token,
+    };
   }
 
   // ---------------- REGISTER ----------------
@@ -82,7 +82,7 @@ export class AuthService {
       password: hashedPassword,
       name,
       isVerified: false,
-      status: "deactive"
+      status: 'deactive',
     });
     await this.otpService.generateAndSendOtp(email);
     return {
@@ -90,8 +90,8 @@ export class AuthService {
         status: true,
         message: 'OTP sent successfully',
         email: user.email,
-        role: user.role, 
-        },
+        role: user.role,
+      },
     };
   }
 
@@ -106,7 +106,9 @@ export class AuthService {
     }
 
     if (!user.status) {
-      throw new UnauthorizedException('User is now deactivated, please contact admin');
+      throw new UnauthorizedException(
+        'User is now deactivated, please contact admin',
+      );
     }
 
     if (user.isLocked) {
@@ -119,10 +121,14 @@ export class AuthService {
           user.lastFailedLoginAt = null;
           await user.save();
         } else {
-          throw new BadRequestException('Login attempt reached.Retry after 2 minutes');
+          throw new BadRequestException(
+            'Login attempt reached.Retry after 2 minutes',
+          );
         }
       } else {
-        throw new BadRequestException('Login attempt reached.Retry after 2 minutes');
+        throw new BadRequestException(
+          'Login attempt reached.Retry after 2 minutes',
+        );
       }
     }
 
@@ -166,31 +172,35 @@ export class AuthService {
         },
       };
     }
-    const { access_token, refresh_token } = await this.generateTokensAndCreateSession(user);
+    const { access_token, refresh_token } =
+      await this.generateTokensAndCreateSession(user);
 
     return {
       data: {
         status: true,
         message: 'Login successful',
         access_token,
-        role: user.role, 
-        refresh_token
+        role: user.role,
+        refresh_token,
       },
     };
   }
 
   // ----------------------Force login---------------------
   async forceLogin(body: ForceLoginDto) {
-    const user = await this.userModel.findOne({ email: body.email.toLocaleLowerCase() });
+    const user = await this.userModel.findOne({
+      email: body.email.toLocaleLowerCase(),
+    });
     await this.sessionModel.deleteMany({ userId: user._id, isActive: true });
-    const { access_token, refresh_token } = await this.generateTokensAndCreateSession(user);
+    const { access_token, refresh_token } =
+      await this.generateTokensAndCreateSession(user);
     return {
       data: {
         status: true,
         message: 'Login successful - all devices logged out',
         access_token,
         role: user.role,
-        refresh_token
+        refresh_token,
       },
     };
   }
@@ -211,15 +221,16 @@ export class AuthService {
 
     await user.save();
 
-    const { access_token, refresh_token } = await this.generateTokensAndCreateSession(user);
+    const { access_token, refresh_token } =
+      await this.generateTokensAndCreateSession(user);
 
     return {
       data: {
         status: true,
         message: 'OTP verified successfully',
         access_token,
-        role: user.role, 
-        refresh_token
+        role: user.role,
+        refresh_token,
       },
     };
   }
@@ -253,7 +264,7 @@ export class AuthService {
 
     try {
       decodedToken = await admin.auth().verifyIdToken(idToken);
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Invalid Google token');
     }
 
@@ -301,7 +312,8 @@ export class AuthService {
       };
     }
 
-    const { access_token, refresh_token } = await this.generateTokensAndCreateSession(user);
+    const { access_token, refresh_token } =
+      await this.generateTokensAndCreateSession(user);
     return {
       data: {
         status: true,
@@ -309,7 +321,6 @@ export class AuthService {
         access_token,
         refresh_token,
         role: user.role,
-
       },
     };
   }
@@ -338,7 +349,7 @@ export class AuthService {
   }
 
   // -----------Refersh token ---------------------------
-  
+
   async refreshToken(refreshToken: string) {
     let payload: any;
 
@@ -358,7 +369,6 @@ export class AuthService {
     let matchedSession: SessionDocument | null = null;
 
     for (const session of sessions) {
-
       const isMatch = await bcrypt.compare(refreshToken, session.token);
       if (isMatch) {
         matchedSession = session;
