@@ -7,7 +7,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-
 import { User, UserDocument } from './schema/user.schema';
 import { OtpService } from '../otp/otp.service';
 import { VerifyOtpDto } from '../otp/dto/verify-otp.dto';
@@ -16,9 +15,7 @@ import { RegisterDto } from './dto/register.dto';
 import { Session, SessionDocument } from 'src/sessions/session.schema';
 import admin from 'src/firebase/firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-
 
 @Injectable()
 export class AuthService {
