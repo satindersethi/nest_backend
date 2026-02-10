@@ -13,8 +13,8 @@ import { OtpService } from '../otp/otp.service';
 import { VerifyOtpDto } from '../otp/dto/verify-otp.dto';
 import { ForceLoginDto, LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { Session, SessionDocument } from '../sessions/session.schema';
-import admin from '../firebase/firebase-admin';
+import { Session, SessionDocument } from 'src/sessions/session.schema';
+import admin from 'src/firebase/firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/auth';
 import { ConfigService } from '@nestjs/config';
 
@@ -29,7 +29,7 @@ export class AuthService {
     private readonly otpService: OtpService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   private async generateTokensAndCreateSession(
     user: UserDocument,
