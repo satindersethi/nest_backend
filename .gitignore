@@ -398,3 +398,6 @@ Temporary Items
 dist
 .webpack
 .serverless/**/*.zip
+
+# Firebase secret
+src/firebase/firebase-service-account.json
